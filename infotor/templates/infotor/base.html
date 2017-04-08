@@ -1,0 +1,20 @@
+﻿{% load staticfiles %}
+<!DOCTYPE HTML>
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% static 'infotor.css' %}" />
+<link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+</head><body>
+{% block javascript %}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block main %}{% endblock %}
+
+<div class="layer4" >
+<table class="subtable" cellpadding="0" cellspacing="0">
+<tr>
+{% block footer %}{% endblock %}
+<td align="right"><p>&copy; Y3401</p></td>
+</tr></table></div>
+{% block menu %}{% endblock %}
+</body></html>

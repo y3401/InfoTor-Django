@@ -1,0 +1,48 @@
+﻿{% extends "infotor/base.html" %}
+
+{% block title %}Категории{% endblock %}
+
+{% block javascript %}
+{% verbatim %}
+<script language="JavaScript" type="text/javascript">
+    function setpar(pole,param) {
+    document.getElementById(pole).value = param;
+    document.form1.Submit1.click()}
+</script>
+{% endverbatim %}
+{% endblock %}
+
+{% block header %}
+<div class="layer2">
+<form method="get" action="" name="form1">
+	<fieldset name="Group1">
+	<legend>Параметры поиска</legend>
+		<input name="querytext" type="text" placeholder="Введите ключевые слова" value="" onchange='document.getElementById("poz").value ="1";' style="width: 63%; height: 20; margin-right: 10px; top: 15px; vertical-align: text-bottom word-spacing: 5; float: left; cursor: text; display: inline;">
+		<select name="category" onchange='document.getElementById("poz").value ="1";document.getElementById("podr").value ="0";' style="width: 200px; position:static; height: 20px; top: 15px; vertical-align: text-bottom">
+<option value="00">...</option>
+
+</select><input name="Submit1" type="submit" id="submit" value="Поиск" style="position: relative; float:right;vertical-align: text-bottom;">
+<input name="pozlist" type="hidden" id="poz" value="">
+<input name="podr" type="hidden" id="podr" value=""></fieldset></form></div>
+{% endblock %}
+
+{% block main %}
+<div class="layer3">
+{% if l_title %}
+<ul>
+    {% for item in l_title %}
+        <li>{{ forloop.counter0|add:page_obj.start_index }}. {{ item.forum.category.name_category }} - {{ item.forum.name_forum }} - <b>{{ item.title }}</b> :: ({{ item.file_id }}, {{ item.size_b|filesizeformat }}, {{ item.date_reg }} ----- {{ item.hash_info }})</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+<td width="30%"><p>Найдено {{ paginator.count }} записи(ей)</p></td>
+<td width="40%" style="text-align:center"><p>Страница {{ page_obj.number }} из {{ paginator.num_pages }}</p></td>
+{% endblock %}
+
+{% block menu %}
+<div class="home"><a class="cl1" href=".." title="На главную страницу"></a></div>
+<div class="back"><a class="cl1" href="javascript:history.back()" title="Назад"></a></div>
+{% endblock %}

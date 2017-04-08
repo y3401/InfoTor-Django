@@ -1,0 +1,42 @@
+﻿{% extends "infotor/base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ result.title }}{% endblock %}
+
+{% block javascript %}
+<script language="JavaScript" type="text/javascript">
+    function showBlock(t) {
+           var elStyle = document.getElementById( t ).style;
+           elStyle.display = (elStyle.display == 'none') ? '' : 'none'}
+</script>
+{% endblock %}
+
+{% block header %}
+<div class="layer6">
+{% if result %}
+<table class="subtable"><tr>
+<td style="vertical-align:top;"><p class="info">{{ result.forum.category.name_category }}<br />&rArr; {{ result.forum.name_forum }}</p></td>
+<td style="width: 18%; vertical-align:middle"><p class="info">Размер: <span title="Точный размер: {{ result.size_b }}" style="cursor: help"><b>{{ result.size_b|filesizeformat  }}</b></span></p></td>
+<td style="width: 25%; vertical-align:middle" align="right"><p class="info"><b>{{ result.date_reg }}</b></p></td>
+<td style="width: 7%;"><a href="magnet:?xt=urn:btih:{{ result.hash_info }}"><img src="{% static 'images/download40.png' %}" align="right" alt="Скачать" title="Скачать по magnet-ссылке"></a></td></tr></table></div>
+<div class="layer5"><h2>{{ result.title }}</h2></div>
+{% else %}
+<div class="layer5"><h2>Запись отсутствует</h2></div>
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="layer3" style="position: fixed;  top:130px; background-color: rgb(227,227,227);">
+<div class="post_body">
+{{ result2|safe }}
+</div></div>
+{% endblock %}
+
+{% block footer %}
+<td width="20%"><p>...</p></td>
+<td width="60%" align="center"><p>...</p></td>
+{% endblock %}
+
+{% block menu %}
+<div class="clo"><a class="cl1" href="javascript:window.close()" title="Закрыть"></a></div>
+{% endblock %}

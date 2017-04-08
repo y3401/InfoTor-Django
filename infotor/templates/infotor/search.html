@@ -1,0 +1,92 @@
+﻿{% extends "infotor/base.html" %}
+{% load staticfiles %}
+{% block title %}Категории{% endblock %}
+
+{% block javascript %}
+{% verbatim %}
+<script language="JavaScript" type="text/javascript">
+function setpar(pole,param) {
+    document.getElementById(pole).value = param;
+    document.form1.Submit1.click();}
+</script>
+{% endverbatim %}
+{% endblock %}
+
+{% block header %}
+<div class="layer2">
+<form method="get" action="" name="form1">
+	<fieldset name="Group1">
+	<legend>Параметры поиска</legend>
+		<input name="querytext" type="text" placeholder="Введите ключевые слова" value="{{ querytext }}" onchange='document.getElementById("poz").value ="1";' style="width: 63%; height: 20; margin-right: 10px; top: 15px; vertical-align: text-bottom word-spacing: 5; float: left; cursor: text; display: inline;">
+		<select name="category" onchange='document.getElementById("poz").value ="1";document.getElementById("podr").value ="0";' style="width: 200px; position:static; height: 20px; top: 15px; vertical-align: text-bottom">
+<option value="00">...</option>
+{% if category %}
+    {% for cate in category %}
+        {% if sel_category == cate.code_category %}
+            <option selected value="{{ cate.code_category }}">{{ cate.name_category }}</option>
+        {% else %} 
+            <option value="{{ cate.code_category }}">{{ cate.name_category }}</option>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+</select><input name="Submit1" type="submit" id="submit" value="Поиск" style="position: relative; float:right;vertical-align: text-bottom;">
+<input name="page" type="hidden" id="poz" value="1">
+<input name="podr" type="hidden" id="podr" value="{{ forum }}"></fieldset></form></div>
+{% endblock %}
+
+{% block main %}
+<div class="layer3">
+{% if mode == 1 %}
+    {% if result %}
+       {% for item in result %}
+<table align="center" cellpadding="2" cellspacing="1" class="maintable">
+    <tr><td class="cell-1"><p><center>{{ forloop.counter|add:pozlist }}</center></p></td>
+        <td class="td-style4"><table class="subtable" cellpadding="0" cellspacing="0">
+    <tr><td class="cell-l">{{ item.forum.category.name_category }} - <a href="#" onclick="setpar('podr',{{item.forum_id}})">{{ item.forum.name_forum }}</a></td>
+        <td class="cell-r">Зарегистрировано: <b>{{ item.date_reg }}</b></td></tr>
+    <tr><td colspan="2" class="cell-title"><a href="#" ONCLICK="window.open('{% url "infotor:info" item.file_id %}','');return false;"><b>{{ item.title }}</b></a></td></tr>
+    <tr><td class="cell-l">Размер: <span title="Точный размер: {{ item.size_b }}" style="cursor: help"><b>{{ item.size_b|filesizeformat }}</b></span></td>
+        <td class="cell-r"><span id="hsh0">{{ item.hash_info }}</span></td></tr></table></td>
+        <td class="cell-2"><a href="magnet:?xt=urn:btih:{{ item.hash_info }}"><img alt="Скачать" longdesc="Скачать по magnet-ссылке" src="{% static 'images/download40.png' %}"></td></tr>
+</table>    
+        {% endfor %}
+    {% endif %}
+{% elif mode == 2 %}
+    <ul>
+    {% for item in result %}
+        <li class="menu"><a href="#" onclick="setpar('podr',{{ item.code_forum }});">{{ item.name_forum }} </a></li>
+    {% endfor %}
+    </ul>
+{% elif mode == 0%}
+    <center><table>
+    <tr width="800px" vertical-align="middle" ><td width="20%"></td><td height="300px" align="left">
+    <p>Для поиска по локальной базе данных <b>InfoTor</b> введите ключевые фразы
+    или слова и/или выберите вначале категорию, затем подраздел,
+    а затем поисковые фразы или слова.</p>
+    <p>Фразы выделяются двойными() или одиночными() кавычками. Между фразами и словами и между слов разделитель - пробел</p>
+    <p>Например:</p> <p><pre class="ppre">&quot;Особенности национальной&quot; 'зимний период' комедия</pre></p>
+    <p>Предпочтительнее использовать ключевые слова.</p>
+    <p>Фразы используйте в том случае, если уверены в написании регистра букв фразы на русском языке (из-за отсутствия модуля ICU поисковый запрос чувствителен к регистру русских букв. Для латиницы же можно вводить как строчными, так и прописными буквами.)<p> 
+    </td><td width="20%"></td></tr></table></center>
+    {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+<td width="30%"><p>Найдено {{ countrec }} </p></td>
+<td width="40%" style="text-align:center"><p>
+{% if mode == 1 %}
+{{ pager|safe }}
+{% elif mode == 2 %}
+{{vers}}
+{% elif mode == 0 %}
+{{vers}}
+{% endif %}
+</p></td>
+{% endblock %}
+
+{% block menu %}
+<div class="home"><a class="cl1" href="{% url 'home' %}" title="На главную страницу"></a></div>
+<div class="back"><a class="cl1" href="javascript:history.back()" title="Назад"></a></div>
+{% endblock %}
